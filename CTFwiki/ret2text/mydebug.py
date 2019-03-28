@@ -48,10 +48,14 @@ class debug:
         log.failure("Module's base address not found.")
         sys.exit(1)
 
-    def dbg(self, p, addr): #, DEBUG):
+    '''
+    if ASLR is open, this function can set the breakpoint on the real addr by searching the program base in the /proc/***/maps file
+    Args:
+        p: the handler
+        addr: the addr you want to set a breakpoint
+    '''
+    def dbg(self, p, addr): 
         global mypid
-        # if DEBUG==False:
-        #     return
         mypid = proc.pidof(p)[0]
         with open('/proc/%s/mem' % mypid) as mem:
             moduleBase = self.findModuleBase(mypid, mem)
